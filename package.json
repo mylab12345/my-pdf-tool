@@ -1,0 +1,176 @@
+{
+  "name": "arena-pdf-studio",
+  "productName": "Arena PDF Studio",
+  "version": "1.0.0",
+  "description": "Local-first, offline PDF editor and toolkit for Windows and Linux",
+  "license": "MIT",
+  "author": {
+    "name": "Arena PDF Studio contributors",
+    "email": "maintainers@example.invalid"
+  },
+  "homepage": "https://github.com/mylab12345/my-pdf-tool",
+  "main": "dist/main/index.cjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "fonts": "node scripts/copy-fonts.mjs",
+    "build:renderer": "vite build",
+    "build:main": "node scripts/build-main.mjs",
+    "build": "npm run fonts && npm run build:renderer && npm run build:main",
+    "dev": "node scripts/dev.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.main.json --noEmit",
+    "lint": "node scripts/lint.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "verify": "npm run typecheck && npm run lint && npm test",
+    "dist:linux": "npm run build && electron-builder --linux --publish never",
+    "dist:win": "npm run build && electron-builder --win --publish never",
+    "dist": "npm run build && electron-builder --linux --win --publish never"
+  },
+  "dependencies": {
+    "@cantoo/pdf-lib": "2.11.1",
+    "@napi-rs/canvas": "1.0.13",
+    "@pdf-lib/fontkit": "1.1.1",
+    "@signpdf/placeholder-plain": "4.0.0",
+    "@signpdf/signer-p12": "4.0.0",
+    "@signpdf/signpdf": "4.0.0",
+    "@signpdf/utils": "4.0.0",
+    "@tesseract.js-data/eng": "1.0.0",
+    "fflate": "0.8.3",
+    "node-forge": "1.4.0",
+    "pdfjs-dist": "6.4.299",
+    "tesseract.js": "7.0.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@expo-google-fonts/inter": "0.4.2",
+    "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/react": "16.3.3",
+    "@types/node": "22.20.0",
+    "@types/node-forge": "1.3.14",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "5.2.0",
+    "electron": "45.0.0",
+    "electron-builder": "26.18.0",
+    "esbuild": "0.28.2",
+    "jsdom": "30.1.3",
+    "playwright-core": "1.64.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "typescript": "5.9.3",
+    "vite": "7.3.7",
+    "vitest": "3.2.7",
+    "zustand": "5.0.16",
+    "lucide-react": "1.61.0",
+    "clsx": "2.1.1"
+  },
+  "build": {
+    "appId": "in.arena.pdfstudio",
+    "productName": "Arena PDF Studio",
+    "copyright": "Copyright © 2026 Arena PDF Studio contributors",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "resources/**/*",
+      "package.json",
+      "!**/*.map"
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "**/node_modules/@napi-rs/canvas*/**",
+      "**/node_modules/@napi-rs/canvas-*/**",
+      "**/node_modules/tesseract.js*/**",
+      "**/node_modules/@tesseract.js-data/**"
+    ],
+    "extraMetadata": {
+      "main": "dist/main/index.cjs"
+    },
+    "fileAssociations": [
+      {
+        "ext": "pdf",
+        "name": "PDF Document",
+        "description": "Portable Document Format",
+        "mimeType": "application/pdf",
+        "role": "Editor",
+        "icon": "build/icon"
+      }
+    ],
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "rpm",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Office",
+      "synopsis": "Local-first PDF editor and toolkit",
+      "description": "Create, edit, annotate, OCR, sign, encrypt, compress, merge and split PDF files entirely offline.",
+      "desktop": {
+        "entry": {
+          "Name": "Arena PDF Studio",
+          "Comment": "Local-first PDF editor and toolkit",
+          "Categories": "Office;Graphics;Viewer;",
+          "MimeType": "application/pdf;"
+        }
+      }
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "publisherName": "Arena PDF Studio",
+      "verifyUpdateCodeSignature": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Arena PDF Studio",
+      "deleteAppDataOnUninstall": false,
+      "include": "build/installer.nsh"
+    },
+    "portable": {
+      "artifactName": "Arena-PDF-Studio-${version}-portable-${arch}.exe"
+    },
+    "appImage": {
+      "artifactName": "Arena-PDF-Studio-${version}-${arch}.AppImage"
+    }
+  }
+}

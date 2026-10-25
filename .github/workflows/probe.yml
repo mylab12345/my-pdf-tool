@@ -1,7 +1,0 @@
-name: probe
-on: [push, workflow_dispatch]
-jobs:
-  probe:
-    runs-on: ubuntu-22.04
-    steps:
-      - run: echo "actions alive"; uname -a; rustc --version || true
